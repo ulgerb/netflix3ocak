@@ -19,6 +19,7 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from appMy.views import *
+from appUser.views import *
 
 
 urlpatterns = [
@@ -27,6 +28,7 @@ urlpatterns = [
     path('browsePage', browsePage, name='browsePage'),
     path('profileUser', profileUser,name='profileUser'),
     path('accountUser', accountUser,name='accountUser'),
-    path('loginUser',loginUser ,name='loginUser'),
+    path('login',loginUser ,name='loginUser'),
+    path('register',registerUser ,name='registerUser'),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
