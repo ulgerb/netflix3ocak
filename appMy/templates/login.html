@@ -74,6 +74,12 @@
                     </label>
                 </div>
 
+                
+                {% for i in messages %}
+                <p class="text-danger">{{ i }}</p>
+                {% endfor %}
+                    
+
                 <p class="p-grey">
                     Netflix'e katılmak ister misiniz? <a href="{% url 'registerUser' %}">Şimdi kaydolun.</a> <br><br>
                     Bu sayfa robot olmadığınızı kanıtlamak için Google reCAPTCHA tarafından korunuyor. Daha fazlasını öğrenin.

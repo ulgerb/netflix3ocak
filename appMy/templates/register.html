@@ -60,21 +60,27 @@
 
    <div class="hero-text">
       <!-- form -->
-      <form action="" class="hero-text2 mt-5 mb-5">
+      <form method="POST" class="hero-text2 mt-5 mb-5">
+         {% csrf_token %}
          <h2>Hesap Oluştur</h2>
 
          <div class="mb-3">
-            <input type="text" class="form-control form-control-lg mt-3" placeholder="İsim">
-            <input type="text" class="form-control form-control-lg mt-3" placeholder="Soyisim">
-            <input type="email" class="form-control form-control-lg mt-3" placeholder="Email">
-            <input type="text" class="form-control form-control-lg mt-3" placeholder="Kullanıcı Adı">
-            <input type="password" name="" id="" class="form-control form-control-lg mt-3" placeholder="Şifre">
-            <input type="password" name="" id="" class="form-control form-control-lg mt-3" placeholder="Yeniden Şifre">
+            <input type="text" name="fname" class="form-control form-control-lg mt-3" placeholder="İsim">
+            <input type="text" name="lname" class="form-control form-control-lg mt-3" placeholder="Soyisim">
+            <input type="email" name="email" class="form-control form-control-lg mt-3" placeholder="Email">
+            <input type="text" name="username" class="form-control form-control-lg mt-3" placeholder="Kullanıcı Adı">
+            <input type="password" name="password1" id="" class="form-control form-control-lg mt-3" placeholder="Şifre">
+            <input type="password" name="password2" id="" class="form-control form-control-lg mt-3" placeholder="Yeniden Şifre">
          </div>
          <div class="d-grid gap-2">
-            <button class="btn btn-danger btn-lg" type="button">Hesap Oluştur</button>
+            <button class="btn btn-danger btn-lg" type="submit">Hesap Oluştur</button>
          </div>
-
+         
+         {% for i in messages %}
+         <p class="text-danger my-1">{{ i }}</p>
+         {% endfor %}
+            
+         
          <p class="p-grey">
             <a href="{% url 'loginUser' %}">Zaten bir hesabım var</a>
          </p>

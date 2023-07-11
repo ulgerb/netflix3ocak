@@ -1,5 +1,7 @@
-from django.shortcuts import render
-
+from django.shortcuts import render, redirect
+from django.contrib.auth import login, logout, authenticate
+from django.contrib import messages
+from django.contrib.auth.models import User
 
 def profileUser(request):
    context = {}
@@ -10,13 +12,56 @@ def accountUser(request):
    return render(request, 'hesap.html',context)
 
 def loginUser(request):
-
-   if request.method == "POST":
-      print(request.POST)
-   
    context = {}
+   if request.method == "POST":
+      username = request.POST.get("username")
+      password = request.POST.get("password")
+      
+      user = authenticate(username=username, password=password) # kullanıcı varsa kullanıcı adını yoksa None değeri döndürür
+      # if user != None:
+      if user is not None:
+         login(request, user)
+         return redirect('profileUser')
+      else:
+         # context.update({"hata":"kullanıcı adı veya şifre yanlış!"})
+         messages.warning(request, "Kullanıcı adı veya şifre yanlış!")
+         return redirect('loginUser')      
+      
+   
    return render(request, 'login.html',context)
    
 def registerUser(request):
    context = {}
+   # Kullanıcı önerme eklenicek
+   
+   if request.method == "POST":
+      fname = request.POST.get("fname")
+      lname = request.POST.get("lname")
+      email = request.POST.get("email")
+      username = request.POST.get("username")
+      password1 = request.POST.get("password1")
+      password2 = request.POST.get("password2")
+      
+      password_bool = email_bool = username_bool = True 
+      if password1 != password2:
+         password_bool = False
+         messages.warning(request, "Şifreler aynı değil!")
+      if User.objects.filter(username=username).exists(): # exists liste içerisi boşsa None döndürür
+         username_bool = False
+         messages.warning(request, "Bu kullanıcı adı zaten kullanılıyor!")
+      if User.objects.filter(email=email).exists(): # exists liste içerisi boşsa None döndürür
+         email_bool = False
+         messages.warning(request, "bu email zaten başkası tarafından kullanılmış!")
+         
+      if password_bool and email_bool and username_bool:
+         user = User.objects.create_user(first_name = fname, last_name=lname, email=email, username=username, password=password1) # obje oluştur
+         user.save() # objeyi yani kullanıcıyı kaydet
+         return redirect("loginUser")
+      
+      
    return render(request, 'register.html',context)
+
+
+def logoutUser(request):
+   logout(request)
+   return redirect("indexPage")
