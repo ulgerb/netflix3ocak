@@ -2,9 +2,53 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.contrib.auth.models import User
+from .models import Profile
+
 
 def profileUser(request):
-   context = {}
+   profile_list = Profile.objects.filter(user=request.user)
+   
+   if request.method == "POST":
+      submit = request.POST.get("submit")
+      
+      if submit == "profileCreate":
+         # Profil Ekleme Start
+         if len(profile_list) < 4:
+            pname = request.POST.get("pname")
+            image = request.FILES.get("image")
+            
+            # if pname.strip(" ") == "" or profile_list.filter(name=pname).exists():
+            #    messages.warning(request, "Profile adını giriniz yada değiştiriniz!!")
+            #    return redirect("profileUser")
+            
+            profile = Profile(name=pname, image=image, user=request.user)
+            if image is None:
+               profile.image = "profile/smile-icon.jpg"
+            
+            profile.save()
+            
+         else:
+            messages.warning(request, "Maximum profil sayısına ulaştınız!")      
+         # Profil Ekleme End
+         
+         # Profile Düzenleme Start
+      elif submit == "profileChange":
+         pname2 = request.POST.get("pname2")
+         image2 = request.FILES.get("image2")
+         pid = request.POST.get("id")
+         
+         profile2 = profile_list.get(id=pid)
+         profile2.name = pname2
+         if image2 is not None:
+            profile2.image = image2
+         profile2.save()
+      
+         # Profile Düzenleme End
+      return redirect("profileUser")
+   
+   context = {
+       "profile_list": profile_list,
+   }
    return render(request, 'browse.html',context)
 
 def accountUser(request):
@@ -46,7 +90,7 @@ def registerUser(request):
       if password1 != password2:
          password_bool = False
          messages.warning(request, "Şifreler aynı değil!")
-      if User.objects.filter(username=username).exists(): # exists liste içerisi boşsa None döndürür
+      if User.objects.filter(username=username).exists(): # exists list içinde obje varsa True yoksa False döndürür
          username_bool = False
          messages.warning(request, "Bu kullanıcı adı zaten kullanılıyor!")
       if User.objects.filter(email=email).exists(): # exists liste içerisi boşsa None döndürür

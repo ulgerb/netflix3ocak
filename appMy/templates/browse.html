@@ -31,53 +31,97 @@
     <div class="container">
         <div class="row w-75 m-auto bg-black bg-opacity-25">
             <h1 class="text-center text-light">Kimler İzliyor?</h1>
-
-            <div class="col-3 mt-5 mb-5">
+            
+            {% for i in profile_list %}
+            <div class="col-3 mt-5 mb-5 position-relative">
+                <div>
+                    <a href="" class="btn btn-primary p-1" style="position: absolute; z-index: 100;" data-bs-toggle="modal" data-bs-target="#profile{{ i.id }}">
+                        <i class="fa-regular fa-pen-to-square fs-5"></i>
+                    </a>                    
+                    <!-- Modal -->
+                    <div class="modal fade" id="profile{{ i.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <form method="POST" enctype="multipart/form-data" class="modal-content">
+                                {% csrf_token %}
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">{{ i.name }} Profili Düzenle</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body d-flex align-items-center gap-3">
+                                    <img class="pimage" style="border: 2px solid #333; width: 100px; height: 100px; object-fit: cover;" src="{{ i.image.url }}" alt="">
+                                    <div>
+                                        <input type="text" name="pname2" value="{{ i.name }}" class="form-control my-3" placeholder="Profil Adı">
+                                        <input type="file" name="image2" id="" onchange="imageChange(this)" class="dataimage form-control my-3">
+                                        <input type="hidden" value="{{ forloop.counter0 }}">
+                                        <input type="hidden" name="id" value="{{ i.id }}">
+                                    </div>
+                                </div>
+                                <div class="modal-footer d-flex justify-content-between">
+                                    <button type="submit" class="btn btn-danger">Profili Sil</button>
+                                    <div>
+                                        <button type="submit" name="submit" value="profileChange" class="btn btn-primary">Düzenle</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                
+                
                 <a href="browse-index.html" class="text-decoration-none text-secondary">
                     <div class="card bg-transparent">
-                        <img src="{% static 'img/smile-icon.jpg' %}" class="card-img-top" alt="">
+                        <!-- <img src="{% static 'img/smile-icon.jpg' %}" style="height: 200px; object-fit: cover;" class="card-img-top" alt=""> -->
+                        <img src="{{ i.image.url }}" style="height: 200px; object-fit: cover;" class="card-img-top" alt="">
                         <div>
-                            <h5 class="card-title text-center ">Berkay</h5>
+                            <h5 class="card-title text-center ">{{ i.name }}</h5>
                         </div>
                     </div>
                 </a>
             </div>
+            {% endfor %}
+            <script>
+                let pimage_list = document.querySelectorAll(".pimage");
+                let dataimage_list = document.querySelectorAll(".dataimage");
+                // document.getElementById("asd").nextElementSibling
 
-            <div class="col-3 mt-5 mb-5">
-                <a href="browse-index.html" class="text-decoration-none text-secondary">
-                    <div class="card bg-transparent">
-                        <img src="{% static 'img/smile-icon.jpg' %}" class="card-img-top" alt="">
-                        <div>
-                            <h5 class="card-title text-center ">Tugay</h5>
-                        </div>
-                    </div>
-                </a>
-            </div>
+                let imageChange = (e)=>{
+                    var selectedFile = e.files[0];
+                    var reader = new FileReader();
+                    var pindex = e.nextElementSibling.value;
 
-            <div class="col-3 mt-5 mb-5">
-                <a href="browse-index.html" class="text-decoration-none text-secondary">
-                    <div class="card bg-transparent">
-                        <img src="{% static 'img/smile-icon.jpg' %}" class="card-img-top" alt="">
-                        <div>
-                            <h5 class="card-title text-center ">Necati</h5>
-                        </div>
-                    </div>
-                </a>
-            </div>
-
-            <div class="col-3 mt-5 mb-5">
-                <a href="browse-index.html" class="text-decoration-none text-secondary">
-                    <div class="card bg-transparent">
-                        <img src="{% static 'img/smile-icon.jpg' %}" class="card-img-top" alt="">
-                        <div>
-                            <h5 class="card-title text-center ">Yavuzselim</h5>
-                        </div>
-                    </div>
-                </a>
-            </div>
+                    reader.onload = function (e) {
+                        pimage_list[pindex].src = e.target.result;
+                    };
+                    reader.readAsDataURL(selectedFile)
+                }
+            </script>
 
             <div class="buton mb-5 text-center">
-                <button class="bg-dark text-secondary w-50 p-2 ">Profil Yönetimi</button>
+                <button class="bg-dark text-secondary w-50 p-2" data-bs-toggle="modal" data-bs-target="#exampleModal">Profil Yönetimi</button>
+                
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <form method="POST" enctype="multipart/form-data" class="modal-content">
+                            {% csrf_token %}
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Profil Ekle</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <input type="text" name="pname" class="form-control my-3" placeholder="Profil Adı">
+                                <input type="file" name="image" id="" class="form-control my-3">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" name="submit" value="profileCreate" class="btn btn-primary">Oluştur</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

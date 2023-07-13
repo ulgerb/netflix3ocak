@@ -12,30 +12,77 @@
       integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
    <!-- My CSS -->
    <link rel="stylesheet" href="{% static 'style.css' %}">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous" referrerpolicy="no-referrer" />
    
+   <style>
+      /* MESSAGES START */
+      .tost {
+         position: fixed;
+         top: 20px;
+         right: 20px;
+         z-index: 2050 !important;
+         animation: timeend 5.8s both;
+         opacity: 1;
+      }
+      .time-animate {
+         width: 100%;
+         height: 10px;
+         background: rgba(255, 255, 255, 0.85);
+         border-bottom-right-radius: 0.375rem;
+         border-bottom-left-radius: 0.375rem;
+         overflow: hidden;
+      }
+      .time-animate div {
+         width: 100%;
+         height: 100%;
+         background: #d59393;
+         animation: timew 5s linear both;
+      }
+      @keyframes timew {
+         100% {
+            width: 0;
+         }
+      }
+      @keyframes timeend {
+         80% {
+            opacity: 1;
+         }
+         100% {
+            opacity: 0;
+            display: none;
+         }
+      }
+
+      /* MESSAGES END */
+   </style>
    {% block css %}
-      
+
    {% endblock css %}
-      
+
 </head>
 
 <body>
 
+   {% include 'part/_messages.html' %}
    
+
    {% block nonheader %}
    {% include 'part/_header.html' %}
    {% endblock nonheader %}
-      
-   
+
+
    {% block main %}
-      
+
    {% endblock main %}
-   
+
    {% include 'part/_footer.html' %}
 
    <!-- JavaScript Bundle with Popper -->
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+      integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+      crossorigin="anonymous"></script>
 </body>
-   
+
 </html>
