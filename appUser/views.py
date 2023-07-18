@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -9,7 +9,7 @@ def profileUser(request):
    profile_list = Profile.objects.filter(user=request.user)
    
    if request.method == "POST":
-      submit = request.POST.get("submit")
+      submit = request.POST.get("submit") # buttonu çekiyoruz
       
       if submit == "profileCreate":
          # Profil Ekleme Start
@@ -17,9 +17,9 @@ def profileUser(request):
             pname = request.POST.get("pname")
             image = request.FILES.get("image")
             
-            # if pname.strip(" ") == "" or profile_list.filter(name=pname).exists():
-            #    messages.warning(request, "Profile adını giriniz yada değiştiriniz!!")
-            #    return redirect("profileUser")
+            if pname.strip(" ") == "" or profile_list.filter(name=pname).exists():
+               messages.warning(request, "Profile adını giriniz yada değiştiriniz!!")
+               return redirect("profileUser")
             
             profile = Profile(name=pname, image=image, user=request.user)
             if image is None:
@@ -42,14 +42,30 @@ def profileUser(request):
          if image2 is not None:
             profile2.image = image2
          profile2.save()
-      
          # Profile Düzenleme End
+
+         # Profile Silme Start
+      elif submit == "profileDelete":
+         pid = request.POST.get("id")
+         profile = get_object_or_404(Profile, id=pid)
+         profile.delete()
+         # Profile Silme End
+
+         
       return redirect("profileUser")
    
    context = {
        "profile_list": profile_list,
    }
    return render(request, 'browse.html',context)
+
+
+# def deleteProfileUser(request, id):
+#    # profile = Profile.objects.filter(id=id).first() # hatasız çekme işlemi yapar
+#    profile = get_object_or_404(Profile, id=id) # get ile aynıdır çekemediği durumda 404 sayfasına yönlendirir
+#    profile.delete()
+#    return redirect("profileUser")
+   
 
 def accountUser(request):
    context = {}

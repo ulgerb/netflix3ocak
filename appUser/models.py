@@ -7,6 +7,7 @@ class Profile(models.Model):
    name = models.CharField(("Profil Adı"), max_length=50)
    image = models.ImageField(("Profil Resmi"), upload_to='profile', max_length=200)
    
+   
    def __str__(self) -> str:
       return self.user.username
    

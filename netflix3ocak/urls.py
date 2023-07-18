@@ -25,8 +25,10 @@ from appUser.views import *
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', indexPage,name='indexPage'),
-    path('browsePage', browsePage, name='browsePage'),
+    path('netflixPage<id>', netflixPage, name='netflixPage'),
+    # === USER ===
     path('profileUser', profileUser,name='profileUser'),
+    # path('deleteProfileUser<id>', deleteProfileUser, name='deleteProfileUser'), # profile silme
     path('accountUser', accountUser,name='accountUser'),
     path('login',loginUser ,name='loginUser'),
     path('register',registerUser ,name='registerUser'),

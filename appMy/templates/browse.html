@@ -57,7 +57,12 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer d-flex justify-content-between">
-                                    <button type="submit" class="btn btn-danger">Profili Sil</button>
+                                    
+                                    {% comment %}
+                                    <a href="{% url 'deleteProfileUser' i.id %}" type="submit" class="btn btn-danger">Profili Sil</a>
+                                    {% endcomment %}
+                                        
+                                    <button type="submit" name="submit" value="profileDelete" class="btn btn-danger">Profili Sil</button>
                                     <div>
                                         <button type="submit" name="submit" value="profileChange" class="btn btn-primary">Düzenle</button>
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
@@ -71,7 +76,7 @@
                 
                 
                 
-                <a href="browse-index.html" class="text-decoration-none text-secondary">
+                <a href="{% url 'netflixPage' i.id %}" class="text-decoration-none text-secondary">
                     <div class="card bg-transparent">
                         <!-- <img src="{% static 'img/smile-icon.jpg' %}" style="height: 200px; object-fit: cover;" class="card-img-top" alt=""> -->
                         <img src="{{ i.image.url }}" style="height: 200px; object-fit: cover;" class="card-img-top" alt="">
