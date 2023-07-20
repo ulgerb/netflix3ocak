@@ -28,6 +28,7 @@ urlpatterns = [
     path('netflix', netflix, name='netflix'),
     # path('netflixPage<id>', netflixPage, name='netflixPage'),
     # === USER ===
+    path('subscribeUser', subscribeUser, name='subscribeUser'),
     path('profileUser', profileUser,name='profileUser'),
     # path('deleteProfileUser<id>', deleteProfileUser, name='deleteProfileUser'), # profile silme
     path('accountUser', accountUser,name='accountUser'),

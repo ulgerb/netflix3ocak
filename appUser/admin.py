@@ -14,4 +14,4 @@ class ProfileAdmin(admin.ModelAdmin):
 class UserinfoAdmin(admin.ModelAdmin):
    '''Admin View for Profile'''
 
-   list_display = ('user','id')
+   list_display = ('user', 'subscribe','id')

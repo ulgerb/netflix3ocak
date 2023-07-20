@@ -6,7 +6,8 @@ class Userinfo(models.Model):
    user = models.OneToOneField(User, verbose_name=("Kullanıcı"), on_delete=models.CASCADE)
    password = models.CharField(("Kullanıcı Şifresi"), max_length=50)
    tel = models.CharField(("Telefon"), max_length=50, default="-")
-
+   subscribe = models.BooleanField(("Abonelik"), default=False)
+   
    def __str__(self) -> str:
       return self.user.username
    
@@ -20,3 +21,4 @@ class Profile(models.Model):
       return self.user.username
    
 
+   
