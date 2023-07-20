@@ -75,9 +75,20 @@
          <div class="d-grid gap-2">
             <button class="btn btn-danger btn-lg" type="submit">Hesap Oluştur</button>
          </div>
+
+         
+            
          
          {% for i in messages %}
+         
+         {% if i.tags == "warning" %}
          <p class="text-danger my-1">{{ i }}</p>
+         {% endif %}
+         
+         {% if i.tags == "info" %}
+         <i class="text-primary my-1 me-3">{{ i }}</i>
+         {% endif %}
+
          {% endfor %}
             
          

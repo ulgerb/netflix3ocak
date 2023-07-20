@@ -2,14 +2,33 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import Profile
+from .models import *
+import random
 
+def accountUser(request):
+   profile = Profile.objects.filter(loginp=True, user=request.user).first()
+
+   context = {
+      "profile":profile,
+   }
+   return render(request, 'hesap.html', context)
 
 def profileUser(request):
    profile_list = Profile.objects.filter(user=request.user)
    
    if request.method == "POST":
       submit = request.POST.get("submit") # buttonu çekiyoruz
+
+      if submit == "profileLogin":
+         pid = request.POST.get("id")
+         profile = get_object_or_404(Profile, id=pid)
+         profile_list.update(loginp=False) # profillerin hepsinden çıkış yaptırtıyor
+         # for i in profile_list:
+         #    i.loginp = False
+         #    i.save()
+         profile.loginp = True # tıklanan profilin girişini yapıyor
+         profile.save()
+         return redirect("netflix")
       
       if submit == "profileCreate":
          # Profil Ekleme Start
@@ -30,15 +49,19 @@ def profileUser(request):
          else:
             messages.warning(request, "Maximum profil sayısına ulaştınız!")      
          # Profil Ekleme End
-         
+          
          # Profile Düzenleme Start
       elif submit == "profileChange":
-         pname2 = request.POST.get("pname2")
+         pname = request.POST.get("pname2")
          image2 = request.FILES.get("image2")
          pid = request.POST.get("id")
+
+         if pname.strip(" ") == "" or profile_list.filter(name=pname).exists():
+            messages.warning(request, "Profile adını giriniz yada değiştiriniz!!")
+            return redirect("profileUser")
          
          profile2 = profile_list.get(id=pid)
-         profile2.name = pname2
+         profile2.name = pname
          if image2 is not None:
             profile2.image = image2
          profile2.save()
@@ -66,10 +89,6 @@ def profileUser(request):
 #    profile.delete()
 #    return redirect("profileUser")
    
-
-def accountUser(request):
-   context = {}
-   return render(request, 'hesap.html',context)
 
 def loginUser(request):
    context = {}
@@ -108,6 +127,33 @@ def registerUser(request):
          messages.warning(request, "Şifreler aynı değil!")
       if User.objects.filter(username=username).exists(): # exists list içinde obje varsa True yoksa False döndürür
          username_bool = False
+         
+         
+         infolist = []
+         i=0
+         
+         while i<20:
+            usernew = username # berkay
+            i += 1
+            if len(infolist) >= 3:
+               break
+            
+            lettercount = random.choice([1,2,3]) # kaç haneli sayı üreticek
+            
+            for j in range(lettercount):
+               letterrandom = random.randint(0,9) # 0dan 9a rastgele sayı verir
+               usernew += str(letterrandom) # berkay172
+               
+            
+            if (usernew not in infolist) and (not User.objects.filter(username=usernew).exists()): # kontrol var mı yok mu tekrar mı ediyor
+               infolist.append(usernew)
+               messages.info(request, usernew)
+               
+               
+            
+         
+         
+         
          messages.warning(request, "Bu kullanıcı adı zaten kullanılıyor!")
       if User.objects.filter(email=email).exists(): # exists liste içerisi boşsa None döndürür
          email_bool = False
@@ -116,6 +162,10 @@ def registerUser(request):
       if password_bool and email_bool and username_bool:
          user = User.objects.create_user(first_name = fname, last_name=lname, email=email, username=username, password=password1) # obje oluştur
          user.save() # objeyi yani kullanıcıyı kaydet
+
+         userinfo = Userinfo(user=user, password=password1)
+         userinfo.save()
+         
          return redirect("loginUser")
       
       

@@ -74,8 +74,23 @@
                     
                 </div>
                 
+                <form method="POST" class="d-flex">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{ i.id }}">
+                    <button type="submit" name="submit" value="profileLogin"
+                        class="text-decoration-none text-secondary p-0 border-0 w-100 bg-dark">
+                        <div class="card bg-transparent">
+                            <!-- <img src="{% static 'img/smile-icon.jpg' %}" style="height: 200px; object-fit: cover;" class="card-img-top" alt=""> -->
+                            <img src="{{ i.image.url }}" style="height: 200px; object-fit: cover;" class="card-img-top" alt="">
+                            <div>
+                                <h5 class="card-title text-center ">{{ i.name }}</h5>
+                            </div>
+                        </div>
+                    </button>
+                </form>
                 
                 
+                {% comment %}
                 <a href="{% url 'netflixPage' i.id %}" class="text-decoration-none text-secondary">
                     <div class="card bg-transparent">
                         <!-- <img src="{% static 'img/smile-icon.jpg' %}" style="height: 200px; object-fit: cover;" class="card-img-top" alt=""> -->
@@ -85,6 +100,8 @@
                         </div>
                     </div>
                 </a>
+                {% endcomment %}
+                    
             </div>
             {% endfor %}
             <script>

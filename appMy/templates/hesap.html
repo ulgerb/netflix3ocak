@@ -40,9 +40,10 @@
                         <button>Üyeliği iptal et</button>
                     </div>
                     <div class="col">
-                        <strong>berkayulger45920@gmail.com</strong>
-                        <p>Parola:*******</p>
-                        <p>tel: 0537 692 52 42</p>
+                        <strong>Email: {{ request.user.email|slice:":5" }}...{{ request.user.email|slice:"-10:" }}</strong>
+                        <p>Parola: {{ request.user.userinfo.password|first }}******{{ request.user.userinfo.password|last }} </p>
+                        <p>tel: {{ request.user.userinfo.tel }}</p>
+                        
                     </div>
                     <div class="col">
                         <a href="">E-postayi değiştir</a> <br>
